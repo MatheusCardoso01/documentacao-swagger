@@ -4,68 +4,72 @@ info:
   description: API de simulação de pagamentos para integração com Wings.
   version: 1.0.0
 servers:
-  - url: https://pagamentos-web.free.beeceptor.com
-    description: Servidor de mock de pagamentos
+- url: https://virtserver.swaggerhub.com/squadradigital/pagamentos-web/1.0.0
+  description: SwaggerHub API Auto Mocking
+- url: https://pagamentos-web.free.beeceptor.com
 paths:
   /api/pagamentos/simulacao_beeceptor:
     post:
       summary: Agendar pagamento
       description: Endpoint para simular agendamento de pagamento.
       requestBody:
-        required: true
         content:
           application/json:
             schema:
-              type: object
-              properties:
-                data:
-                  type: string
-                  example: "2025-11-03"
-                valor_total:
-                  type: number
-                  format: float
-                  example: 2500.00
-                banco:
-                  type: string
-                  example: "001"
-                agencia:
-                  type: string
-                  example: "1234"
-                conta:
-                  type: string
-                  example: "56789-0"
-              required:
-                - data
-                - valor_total
-                - banco
-                - agencia
-                - conta
+              $ref: "#/components/schemas/pagamentos_simulacao_beeceptor_body"
+        required: true
       responses:
         "200":
           description: Pagamento agendado com sucesso
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  status:
-                    type: string
-                    example: "Pagamento agendado"
-                  data_pagamento:
-                    type: string
-                    example: "2025-11-03"
-                  valor_total:
-                    type: number
-                    format: float
-                    example: 2500.00
-                  banco:
-                    type: string
-                    example: "001"
-                  agencia:
-                    type: string
-                    example: "1234"
-                  conta:
-                    type: string
-                    example: "56789-0"
-        "400":
-          description: Dados inválidos
+                $ref: "#/components/schemas/inline_response_200"
+components:
+  schemas:
+    pagamentos_simulacao_beeceptor_body:
+      type: object
+      properties:
+        data:
+          type: string
+          description: Data do pagamento
+          example: 2025-11-03
+        valor_total:
+          type: number
+          description: Valor total do pagamento
+          format: float
+          example: 2500
+        banco:
+          type: string
+          description: Código do banco
+          example: "001"
+        agencia:
+          type: string
+          description: Número da agência
+          example: "1234"
+        conta:
+          type: string
+          description: Número da conta
+          example: 56789-0
+    inline_response_200:
+      type: object
+      properties:
+        status:
+          type: string
+          example: Pagamento agendado
+        data_pagamento:
+          type: string
+          example: 2025-11-03
+        valor_total:
+          type: number
+          format: float
+          example: 250
+        banco:
+          type: string
+          example: "001"
+        agencia:
+          type: string
+          example: "1234"
+        conta:
+          type: string
+          example: 56789-0
