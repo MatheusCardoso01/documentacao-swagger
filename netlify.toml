@@ -1,0 +1,3 @@
+[build]
+  publish = "."     # publica o diretório atual (a raiz do projeto)
+  command = ""      # nenhum comando de build
