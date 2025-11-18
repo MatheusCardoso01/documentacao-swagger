@@ -1,75 +1,72 @@
 openapi: 3.0.4
 info:
-  title: Pagamentos API - Mock
-  description: API de simulação de pagamentos para integração com Wings.
+  title: API - Solicitar Equipamentos e Gerar Nota Fiscal
   version: 1.0.0
+  description: Endpoint para solicitar equipamentos e gerar uma Nota Fiscal.
+
 servers:
-- url: https://virtserver.swaggerhub.com/squadradigital/pagamentos-web/1.0.0
-  description: SwaggerHub API Auto Mocking
-- url: https://pagamentos-web.free.beeceptor.com
+  - url: https://api-bus-dev.w4b.app
+    description: Ambiente de desenvolvimento API Bus
+
 paths:
-  /api/pagamentos/simulacao_beeceptor:
+  /DomainFunctions/MatheusCardoso/2025_1/SolicitarEquipamentosEGerarNF:
     post:
-      summary: Agendar pagamento
-      description: Endpoint para simular agendamento de pagamento.
+      summary: Solicita equipamentos e gera uma Nota Fiscal
+      description: Endpoint para solicitar equipamentos e gerar uma Nota Fiscal.
+      operationId: SolicitarEquipamentosEGerarNF
       requestBody:
+        required: true
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/pagamentos_simulacao_beeceptor_body"
-        required: true
+              $ref: "#/components/schemas/SolicitarEquipamentosRequest"
       responses:
         "200":
-          description: Pagamento agendado com sucesso
+          description: Nota Fiscal gerada com sucesso
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/inline_response_200"
+                $ref: "#/components/schemas/NotaFiscal"
+        "400":
+          description: Requisição inválida
+        "500":
+          description: Erro interno do servidor
+
 components:
   schemas:
-    pagamentos_simulacao_beeceptor_body:
+    SolicitarEquipamentosRequest:
       type: object
       properties:
-        data:
+        NomeSolicitante:
           type: string
-          description: Data do pagamento
-          example: 2025-11-03
-        valor_total:
-          type: number
-          description: Valor total do pagamento
-          format: float
-          example: 2500
-        banco:
+          description: Nome da pessoa que está solicitando os equipamentos
+          example: Matheus Cardoso
+        Departamento:
           type: string
-          description: Código do banco
-          example: "001"
-        agencia:
-          type: string
-          description: Número da agência
-          example: "1234"
-        conta:
-          type: string
-          description: Número da conta
-          example: 56789-0
-    inline_response_200:
+          description: Nome do departamento solicitante
+          example: TI
+        EquipamentosSolicitados:
+          type: array
+          description: Lista de equipamentos solicitados
+          items:
+            type: string
+            example: Notebook
+      required:
+        - NomeSolicitante
+        - EquipamentosSolicitados
+
+    NotaFiscal:
       type: object
       properties:
-        status:
+        NumeroNF:
           type: string
-          example: Pagamento agendado
-        data_pagamento:
+          description: Número da nota fiscal gerada
+          example: "12345"
+        DataChegadaEquipamentos:
           type: string
-          example: 2025-11-03
-        valor_total:
-          type: number
-          format: float
-          example: 250
-        banco:
-          type: string
-          example: "001"
-        agencia:
-          type: string
-          example: "1234"
-        conta:
-          type: string
-          example: 56789-0
+          format: date-time
+          description: Data estimada de chegada dos equipamentos
+          example: "2025-11-30T14:00:00Z"
+      required:
+        - NumeroNF
+        - DataChegadaEquipamentos
