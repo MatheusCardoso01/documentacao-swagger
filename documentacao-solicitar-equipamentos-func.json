@@ -1,0 +1,118 @@
+{
+  "openapi": "3.0.0",
+  "servers": [
+    {
+      "description": "Ambiente Dev",
+      "url": "https://api-bus-dev.w4b.app"
+    }
+  ],
+  "info": {
+    "description": "API para solicitação de equipamentos e geração de Nota Fiscal.",
+    "version": "1.0.0",
+    "title": "Solicitar Equipamentos e Gerar NF",
+    "contact": {
+      "email": "you@your-company.com"
+    },
+    "license": {
+      "name": "Apache 2.0",
+      "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
+    }
+  },
+  "tags": [
+    {
+      "name": "Solicitação",
+      "description": "Operações relacionadas à solicitação de equipamentos"
+    }
+  ],
+  "paths": {
+    "/DomainFunctions/MatheusCardoso/2025_1/SolicitarEquipamentosEGerarNF": {
+      "post": {
+        "tags": ["Solicitação"],
+        "summary": "Solicitar equipamentos e gerar Nota Fiscal",
+        "description": "Recebe os dados da solicitação e retorna informações relacionadas à emissão da Nota Fiscal.",
+        "requestBody": {
+          "description": "Dados da solicitação de equipamentos",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SolicitacaoRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Solicitação processada com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SolicitacaoResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Entrada inválida"
+          },
+          "500": {
+            "description": "Erro ao processar a solicitação"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "SolicitacaoRequest": {
+        "type": "object",
+        "required": [
+          "solicitante",
+          "listaEquipamentos"
+        ],
+        "properties": {
+          "solicitante": {
+            "type": "string",
+            "description": "Nome do responsável pela solicitação",
+            "example": "Matheus Cardoso"
+          },
+          "listaEquipamentos": {
+            "type": "array",
+            "description": "Lista de equipamentos solicitados",
+            "items": {
+              "type": "object",
+              "properties": {
+                "nome": { "type": "string", "example": "Notebook Dell" },
+                "quantidade": { "type": "integer", "example": 1 }
+              }
+            }
+          },
+          "motivo": {
+            "type": "string",
+            "description": "Justificativa da solicitação",
+            "example": "Equipamento necessário para atividades do projeto."
+          }
+        }
+      },
+      "SolicitacaoResponse": {
+        "type": "object",
+        "properties": {
+          "numeroNF": {
+            "type": "string",
+            "description": "Número da Nota Fiscal gerada",
+            "example": "NF-2025-001234"
+          },
+          "status": {
+            "type": "string",
+            "example": "Processado"
+          },
+          "protocolo": {
+            "type": "string",
+            "description": "Código de controle da solicitação",
+            "example": "PROTO-987654321"
+          }
+        }
+      }
+    }
+  }
+}
